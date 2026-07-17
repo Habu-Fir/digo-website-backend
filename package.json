@@ -1,0 +1,51 @@
+{
+  "name": "digo-tsion-backend",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "npm run clean && tsc",
+    "build:watch": "tsc --watch",
+    "start": "node dist/server.js",
+    "clean": "rimraf dist",
+    "clean:all": "rimraf dist node_modules",
+    "seed": "tsx src/utils/seed.ts",
+    "prebuild": "npm run clean",
+    "postbuild": "echo ✅ Build completed successfully!"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Digo Tsion Backend API",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mongoose": "^5.11.96",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^26.0.1",
+    "nodemon": "^3.1.14",
+    "rimraf": "^5.0.10",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.22.4",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "ai": "^7.0.14",
+    "bcryptjs": "^3.0.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "helmet": "^8.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.2",
+    "morgan": "^1.11.0",
+    "multer": "^2.2.0",
+    "open": "^11.0.0"
+  }
+}

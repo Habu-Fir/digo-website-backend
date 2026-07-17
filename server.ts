@@ -1,0 +1,132 @@
+// backend/src/server.ts
+
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import compression from 'compression';
+import path from 'path';
+
+import connectDB from './src/config/database';
+import { errorHandler } from './src/middleware/errorHandler';
+
+// Routes
+import authRoutes from './src/routes/auth.routes';
+import postRoutes from './src/routes/post.routes';
+import articleRoutes from './src/routes/article.routes';
+import galleryRoutes from './src/routes/gallery.routes';
+import eventRoutes from './src/routes/event.routes';
+import investmentRoutes from './src/routes/investment.routes';
+import landmarkRoutes from './src/routes/landmark.routes';
+
+// Load environment variables
+dotenv.config();
+
+// Connect database
+connectDB();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// ===============================
+// CORS
+// ===============================
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === 'production'
+      ? process.env.FRONTEND_URL
+      : [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://localhost:3001',
+      ],
+  credentials: true,
+};
+
+// ===============================
+// Middleware
+// ===============================
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: 'cross-origin',
+    },
+  })
+);
+
+app.use(cors(corsOptions));
+
+app.use(compression());
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
+
+// ===============================
+// Static uploads
+// ===============================
+const uploadsPath = path.resolve(__dirname, '../uploads');
+
+console.log('📁 Upload folder:', uploadsPath);
+
+app.use('/uploads', express.static(uploadsPath));
+
+// Optional request logger
+app.use('/uploads', (req, _res, next) => {
+  console.log(`📸 ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+// ===============================
+// Health Check
+// ===============================
+app.get('/health', (_req, res) => {
+  res.status(200).json({
+    success: true,
+    server: 'running',
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// ===============================
+// API Routes
+// ===============================
+app.use('/api/auth', authRoutes);
+app.use('/api/articles', articleRoutes);
+app.use('/api/gallery', galleryRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/investments', investmentRoutes);
+app.use('/api/landmarks', landmarkRoutes);
+
+// ===============================
+// 404
+// ===============================
+app.use((_req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found',
+  });
+});
+
+// ===============================
+// Error Handler
+// ===============================
+app.use(errorHandler);
+
+// ===============================
+// Start Server
+// ===============================
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+  console.log(`❤️ Health: http://localhost:${PORT}/health`);
+  console.log(`📸 Uploads: http://localhost:${PORT}/uploads`);
+});
+
+export default app;
