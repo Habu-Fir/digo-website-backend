@@ -8,17 +8,17 @@ import morgan from 'morgan';
 import compression from 'compression';
 import path from 'path';
 
-import connectDB from './src/config/database';
-import { errorHandler } from './src/middleware/errorHandler';
+import connectDB from './config/database';
+import { errorHandler } from './middleware/errorHandler';
 
 // Routes
-import authRoutes from './src/routes/auth.routes';
-import postRoutes from './src/routes/post.routes';
-import articleRoutes from './src/routes/article.routes';
-import galleryRoutes from './src/routes/gallery.routes';
-import eventRoutes from './src/routes/event.routes';
-import investmentRoutes from './src/routes/investment.routes';
-import landmarkRoutes from './src/routes/landmark.routes';
+import authRoutes from './routes/auth.routes';
+import postRoutes from './routes/post.routes';
+import articleRoutes from './routes/article.routes';
+import galleryRoutes from './routes/gallery.routes';
+import eventRoutes from './routes/event.routes';
+import investmentRoutes from './routes/investment.routes';
+import landmarkRoutes from './routes/landmark.routes';
 
 // Load environment variables
 dotenv.config();
