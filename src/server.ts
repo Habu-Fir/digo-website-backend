@@ -32,15 +32,36 @@ const PORT = process.env.PORT || 5000;
 // ===============================
 // CORS
 // ===============================
-const corsOptions = {
-  origin:
-    process.env.NODE_ENV === 'production'
-      ? process.env.FRONTEND_URL
-      : [
-        'http://localhost:5173',
-        'http://localhost:3000',
-        'http://localhost:3001',
-      ],
+// Build the list of allowed origins. Always allow common local dev ports,
+// and additionally allow the deployed frontend URL(s) from env vars.
+// FRONTEND_URL can be a single URL or a comma-separated list of URLs.
+const localOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:3001',
+];
+
+const productionOrigins = (process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((url) => url.trim())
+  .filter(Boolean);
+
+const allowedOrigins = [...localOrigins, ...productionOrigins];
+
+console.log('✅ Allowed CORS origins:', allowedOrigins);
+
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.warn(`❌ Blocked by CORS: ${origin}`);
+    return callback(new Error(`Origin ${origin} not allowed by CORS`));
+  },
   credentials: true,
 };
 
