@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import compression from 'compression';
 import path from 'path';
 
+
 import connectDB from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -18,6 +19,7 @@ import articleRoutes from './routes/article.routes';
 import galleryRoutes from './routes/gallery.routes';
 import eventRoutes from './routes/event.routes';
 import investmentRoutes from './routes/investment.routes';
+import statsRoutes from './routes/stats.routes'
 import landmarkRoutes from './routes/landmark.routes';
 
 // Load environment variables
@@ -124,6 +126,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/investments', investmentRoutes);
 app.use('/api/landmarks', landmarkRoutes);
+app.use('/api/stats', statsRoutes);
 
 // ===============================
 // 404
