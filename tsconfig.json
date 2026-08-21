@@ -40,7 +40,8 @@
     "forceConsistentCasingInFileNames": true,
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/controllers/statsController.ts"
   ],
   "exclude": [
     "node_modules",
