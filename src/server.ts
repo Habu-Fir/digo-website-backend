@@ -338,6 +338,7 @@ app.use(
   express.static(uploadsPath)
 );
 
+
 // Optional upload request logger
 app.use(
   '/uploads',
